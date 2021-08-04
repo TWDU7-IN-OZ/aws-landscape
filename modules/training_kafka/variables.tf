@@ -10,6 +10,11 @@ variable "subnet_id" {
   description = "Subnet in which to provision Kafka"
 }
 
+variable "availability_zones" {
+  description = "The availability zones for which to add subnets."
+  type        = "list"
+}
+
 variable "ec2_key_pair" {
   description = "EC2 key pair to use to SSH into Kafka instance"
 }
