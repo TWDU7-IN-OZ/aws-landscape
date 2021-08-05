@@ -2,7 +2,10 @@ terraform {
   backend "s3" {}
 }
 
-
+provider "aws" {
+  region  = "${var.aws_region}"
+  version = "~> 2.0"
+}
 
 data "terraform_remote_state" "monitoring" {
   backend = "s3"
