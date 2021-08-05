@@ -21,6 +21,6 @@ resource "aws_instance" "kafka" {
 
 resource "aws_volume_attachment" "kafka_instance_ebs_attachment" {
   device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.kafka_ebs.id
-  instance_id = aws_instance.kafka.id
+  volume_id   = "${aws_ebs_volume.kafka_ebs.id}"
+  instance_id = "${aws_instance.kafka.id}"
 }
