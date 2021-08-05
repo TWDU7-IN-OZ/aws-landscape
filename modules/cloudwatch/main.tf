@@ -19,7 +19,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
 
   period                    = "300"
   statistic                = "Average"
-  threshold                 = "70" 
+  threshold                 = "50" 
   alarm_description         = "Disk usage for / is high"
   insufficient_data_actions = []
   actions_enabled           = true
