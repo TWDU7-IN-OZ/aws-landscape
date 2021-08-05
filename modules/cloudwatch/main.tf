@@ -4,7 +4,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
   metric_name               = "DiskSpaceUtilization"
-  namespace                 = "CWAgent"
+  namespace                 = "System/Linux"
 
 
 
