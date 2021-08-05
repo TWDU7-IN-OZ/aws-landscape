@@ -105,14 +105,14 @@ workflows:
           requires:
             - approvebuildAMIs
 
-      - compileKafkaTF:
+      - compileProductionEnvironment:
           requires:
             - dummy
 
       - approveBuildProductionEnvironment:
           type: approval
           requires:
-            - compileKafkaTF
+            - compileProductionEnvironment
 
       - buildProductionEnvironment:
           requires:
