@@ -11,9 +11,9 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
   dimensions = {
       InstanceId    = "i-01fdc617e6e5016e1" #Please do a data source and remove the hardcode
       # InstanceId  = data.aws_instance.kafka_instance.
-      path          = "/"
+      MountPath          = "/"
       device        = "your-device"
-      fstype        = "xfs"
+      Filesystem        = "/dev/xvda1"
 
   }
 
