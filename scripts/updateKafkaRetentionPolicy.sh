@@ -48,7 +48,7 @@ sudo su root
 mkdir -p /data/kafka
 systemctl stop confluent-kafka
 systemctl stop confluent-zookeeper
-sed -i -e 's/log.retention.hours=168/log.retention.hours=72/g' /etc/kafka/server.properties
+sed -i -e 's/log.retention.hours=3/log.retention.hours=72/g' /etc/kafka/server.properties
 systemctl start confluent-zookeeper
 systemctl start confluent-kafka
 EOF
