@@ -111,7 +111,8 @@ jobs:
          fingerprints:
            - "c4:31:97:61:4c:4f:39:74:28:37:50:13:30:d9:a6:96"
      - run:
-         command: ./scripts/mountEBSToEC2.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
+         command: source /okta_venv/bin/activate;
+                  ./scripts/mountEBSToEC2.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
 
 workflows:
   version: 2
