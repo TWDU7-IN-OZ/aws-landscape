@@ -114,6 +114,19 @@ jobs:
          command: source /okta_venv/bin/activate;
                   ./scripts/mountEBSToEC2.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
 
+ updateKafkaRetention:
+   <<: *defaults
+   steps:
+     - checkout
+     - attach_workspace:
+         at: /home/circleci/project
+     - add_ssh_keys:
+         fingerprints:
+           - "c4:31:97:61:4c:4f:39:74:28:37:50:13:30:d9:a6:96"
+     - run:
+         command: source /okta_venv/bin/activate;
+           ./scripts/updateKafkaRetentionPolicy.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
+
  updateKafkaProperties:
    <<: *defaults
    steps:
@@ -150,6 +163,15 @@ workflows:
       - updateKafkaProperties:
           requires:
             - approveForUpdatingKafkaProperties
+
+      - approveForUpdatingKafkaRetention:
+          type: approval
+          requires:
+            - dummy
+
+      - updateKafkaRetention:
+          requires:
+            - approveForUpdatingKafkaRetention
 
       - approvefirstTimeSetup:
           type: approval
