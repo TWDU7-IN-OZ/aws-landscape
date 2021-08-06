@@ -4,12 +4,12 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
   metric_name               = "DiskSpaceUtilization"
-  namespace                 = "System/Linux"
+  namespace                 = "AWS/EBS"
 
 
 
   dimensions = {
-      InstanceId    = "i-01fdc617e6e5016e1" #Please do a data source and remove the hardcode
+      VolumeId    = "vol-0d8138e6259608284" #Please do a data source and remove the hardcode
       # InstanceId  = data.aws_instance.kafka_instance.
       MountPath          = "/data"
       Filesystem        = "/dev/xvdh"
