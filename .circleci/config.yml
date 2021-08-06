@@ -69,10 +69,6 @@ jobs:
          command: source /okta_venv/bin/activate;
                   ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring apply -input=false -auto-approve;
 
-                 
-
-
-
  buildClientVPN:
      <<: *defaults
      steps:
@@ -105,12 +101,32 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring destroy -input=false -auto-approve;
+ mountEBS:
+   <<: *defaults
+   steps:
+     - checkout
+     - attach_workspace:
+         at: /home/circleci/project
+     - add_ssh_keys:
+         fingerprints:
+           - "c4:31:97:61:4c:4f:39:74:28:37:50:13:30:d9:a6:96"
+     - run:
+         command: ./scripts/mountEBSToEC2.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
 
 workflows:
   version: 2
   build:
     jobs:
       - dummy
+
+      - approveForEBSMounting:
+          type: approval
+          requires:
+            - dummy
+
+      - mountEBS:
+          requires:
+            - approveForEBSMounting
 
       - approvefirstTimeSetup:
           type: approval
