@@ -46,6 +46,7 @@ echo "====Updating Kafka Properties===="
 ssh kafka.${TRAINING_COHORT}.training <<EOF
 sudo su root
 mkdir -p /data/kafka
+chown -R cp-kafka:confluent /data/kafka
 systemctl stop confluent-kafka
 systemctl stop confluent-zookeeper
 cp -r /var/lib/kafka/* /data/kafka/
