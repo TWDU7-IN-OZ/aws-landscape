@@ -46,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
 
   period                    = "300"
   statistic                 = "Average"
-  threshold                 = "70"
+  threshold                 = "10"
   alarm_description         = "Disk usage for dev/xvda1 is high"
   insufficient_data_actions = []
   actions_enabled           = true
