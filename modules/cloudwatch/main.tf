@@ -76,5 +76,4 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDiskTest"{
     threshold = "40"
     comparison_operator = "GreaterThanThreshold"
     treat_missing_data = "missing"
-    }
 }
