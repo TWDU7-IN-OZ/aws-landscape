@@ -1,5 +1,5 @@
 
-resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
+resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceVol" {
   alarm_name                = "Disk_Utilization_Kafka"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
@@ -27,7 +27,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
 }
 
 
-resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstance" {
+resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
   alarm_name          = "Disk_Utilization_KafkaDisk"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "1"
