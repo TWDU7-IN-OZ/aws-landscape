@@ -39,15 +39,15 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
   dimensions = {
      InstanceId  = "i-01fdc617e6e5016e1" #Please do a data source and remove the hardcode
     # InstanceId  = data.aws_instance.kafka_instance.
-    MountPath    = "/data"
+    MountPath    = "/"
     InstanceType = "m4.large"
-    Filesystem   = "/dev/xvdh"
+    Filesystem   = "/dev/xvda1"
   }
 
   period                    = "300"
   statistic                 = "Average"
   threshold                 = "70"
-  alarm_description         = "Disk usage for /dev/xvdh is high"
+  alarm_description         = "Disk usage for dev/xvda1 is high"
   insufficient_data_actions = []
   actions_enabled           = true
   alarm_actions             = ["arn:aws:cloudwatch:ap-southeast-1:483506802077:alarm:Kafka Disk Space Metrics"] #variablize it
