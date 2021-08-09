@@ -30,7 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceVol" {
 resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
   alarm_name          = "Disk_Utilization_KafkaDisk"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = "20"
   metric_name         = "DiskSpaceUtilization"
   namespace           = "System/Linux"
 
