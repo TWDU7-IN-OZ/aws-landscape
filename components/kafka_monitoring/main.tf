@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "${var.aws_region}"
+  region  = var.aws_region
   version = "~> 2.0"
 }
 
@@ -12,7 +12,7 @@ data "terraform_remote_state" "monitoring" {
   config {
     key    = "monitoring.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = "${var.aws_region}"
+    region = var.aws_region
   }
 }
 
@@ -20,5 +20,5 @@ data "terraform_remote_state" "monitoring" {
 
 module "cloudwatch" {
   source = "../../modules/cloudwatch"
-  
+
 }

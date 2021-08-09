@@ -7,7 +7,7 @@ variable "aws_region" {
 }
 
 variable "emr_cluster" {
-  type = "map"
+  type = map(string)
   default = {
     "master_type" = "m1.medium"
     "core_type"   = "m1.medium"

@@ -7,7 +7,7 @@ variable "aws_region" {
 }
 
 variable "ingester" {
-  type = "map"
+  type = map(string)
   default = {
     instance_type = "t2.micro"
   }

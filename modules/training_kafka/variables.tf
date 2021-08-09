@@ -12,7 +12,7 @@ variable "subnet_id" {
 
 variable "availability_zones" {
   description = "The availability zones for which to add subnets."
-  type        = "list"
+  type        = list(string)
 }
 
 variable "ec2_key_pair" {

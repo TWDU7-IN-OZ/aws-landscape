@@ -8,6 +8,6 @@ data "template_cloudinit_config" "ingester" {
 
   part {
     content_type = "text/x-shellscript"
-    content      = "${data.local_file.ingester_dependencies.content}"
+    content      = data.local_file.ingester_dependencies.content
   }
 }

@@ -1,7 +1,7 @@
 resource "aws_security_group" "master" {
   name        = "emr-master-${var.deployment_identifier}"
   description = "AWS Managed security group for EMR master node"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   lifecycle {
     ignore_changes = ["ingress", "egress"]
@@ -9,18 +9,18 @@ resource "aws_security_group" "master" {
 
   revoke_rules_on_delete = true
 
-  tags = "${merge(
+  tags = (merge(
     local.common_tags,
     map(
       "Name", "emr-master-${var.deployment_identifier}"
     )
-  )}"
+  ))
 
 }
 
 resource "aws_security_group_rule" "master_egress" {
   type              = "egress"
-  security_group_id = "${aws_security_group.master.id}"
+  security_group_id = aws_security_group.master.id
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
   to_port           = 0
@@ -31,7 +31,7 @@ resource "aws_security_group_rule" "master_egress" {
 resource "aws_security_group" "core" {
   name        = "emr-core-${var.deployment_identifier}"
   description = "AWS Managed security group for EMR core nodes"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   lifecycle {
     ignore_changes = ["ingress", "egress"]
@@ -39,17 +39,17 @@ resource "aws_security_group" "core" {
 
   revoke_rules_on_delete = true
 
-  tags = "${merge(
+  tags = (merge(
     local.common_tags,
     map(
       "Name", "emr-core-${var.deployment_identifier}"
     )
-  )}"
+  ))
 }
 
 resource "aws_security_group_rule" "core_egress" {
   type              = "egress"
-  security_group_id = "${aws_security_group.core.id}"
+  security_group_id = aws_security_group.core.id
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
   to_port           = 0
@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "core_egress" {
 resource "aws_security_group" "service" {
   name        = "emr-service-${var.deployment_identifier}"
   description = "AWS Managed security group for EMR service"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
   lifecycle {
     ignore_changes = ["ingress", "egress"]
@@ -68,32 +68,32 @@ resource "aws_security_group" "service" {
 
   revoke_rules_on_delete = true
 
-  tags = "${merge(
+  tags = (merge(
     local.common_tags,
     map(
       "Name", "emr-service-${var.deployment_identifier}"
     )
-  )}"
+  ))
 }
 
 resource "aws_security_group" "emr_shared" {
 
   name        = "emr-shared-${var.deployment_identifier}"
   description = "Allow other services to connect to EMR nodes"
-  vpc_id      = "${var.vpc_id}"
+  vpc_id      = var.vpc_id
 
-  tags = "${merge(
+  tags = (merge(
     local.common_tags,
     map(
       "Name", "emr-shared-${var.deployment_identifier}"
     )
-  )}"
+  ))
 }
 
 resource "aws_security_group_rule" "bastion_ssh" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 22
   to_port                  = 22
   protocol                 = "tcp"
@@ -102,8 +102,8 @@ resource "aws_security_group_rule" "bastion_ssh" {
 
 resource "aws_security_group_rule" "bastion_yarn_resourcemanager" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 8088
   to_port                  = 8088
   protocol                 = "tcp"
@@ -112,8 +112,8 @@ resource "aws_security_group_rule" "bastion_yarn_resourcemanager" {
 
 resource "aws_security_group_rule" "bastion_yarn_nodemanager" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 8042
   to_port                  = 8042
   protocol                 = "tcp"
@@ -122,8 +122,8 @@ resource "aws_security_group_rule" "bastion_yarn_nodemanager" {
 
 resource "aws_security_group_rule" "bastion_hdfs_namenode" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 50070
   to_port                  = 50070
   protocol                 = "tcp"
@@ -132,8 +132,8 @@ resource "aws_security_group_rule" "bastion_hdfs_namenode" {
 
 resource "aws_security_group_rule" "bastion_hdfs_datanode" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 50075
   to_port                  = 50075
   protocol                 = "tcp"
@@ -142,8 +142,8 @@ resource "aws_security_group_rule" "bastion_hdfs_datanode" {
 
 resource "aws_security_group_rule" "bastion_spark_history" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 18080
   to_port                  = 18080
   protocol                 = "tcp"
@@ -152,8 +152,8 @@ resource "aws_security_group_rule" "bastion_spark_history" {
 
 resource "aws_security_group_rule" "bastion_zeppelin" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 8890
   to_port                  = 8890
   protocol                 = "tcp"
@@ -162,8 +162,8 @@ resource "aws_security_group_rule" "bastion_zeppelin" {
 
 resource "aws_security_group_rule" "bastion_hue" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 8888
   to_port                  = 8888
   protocol                 = "tcp"
@@ -172,8 +172,8 @@ resource "aws_security_group_rule" "bastion_hue" {
 
 resource "aws_security_group_rule" "bastion_ganglia" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 80
   to_port                  = 80
   protocol                 = "tcp"
@@ -182,8 +182,8 @@ resource "aws_security_group_rule" "bastion_ganglia" {
 
 resource "aws_security_group_rule" "bastion_hbase" {
   type                     = "ingress"
-  security_group_id        = "${aws_security_group.emr_shared.id}"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  security_group_id        = aws_security_group.emr_shared.id
+  source_security_group_id = var.bastion_security_group_id
   from_port                = 16010
   to_port                  = 16010
   protocol                 = "tcp"

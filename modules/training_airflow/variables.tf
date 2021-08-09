@@ -12,7 +12,7 @@ variable "vpc_id" {
 
 variable "subnet_ids" {
   description = "Subnet in which to provision airflow and postgres"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "dns_zone_id" {

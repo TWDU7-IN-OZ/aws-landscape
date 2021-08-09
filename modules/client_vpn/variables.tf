@@ -8,12 +8,12 @@ variable "deployment_identifier" {
 
 variable "subnet_ids" {
   description = "Subnet IDs to attach the VPN to"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "dns_servers" {
   description = "DNS server for the Client"
-  type        = "list"
+  type        = list(string)
   default     = ["8.8.8.8", "8.8.4.4"]
 }
 
