@@ -17,7 +17,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk"{
     period = 300
     evaluation_periods = 1
     datapoints_to_alarm = 1
-    threshold = "28"
+    threshold = "70"
     comparison_operator = "GreaterThanThreshold"
     treat_missing_data = "missing"
 }
