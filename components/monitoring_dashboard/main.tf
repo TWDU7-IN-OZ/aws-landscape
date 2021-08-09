@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.aws_region
+  region  = "${var.aws_region}"
   version = "~> 2.0"
 }
 
@@ -13,7 +13,7 @@ data "terraform_remote_state" "training_kafka" {
   config {
     key    = "training_kafka.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 
@@ -22,7 +22,7 @@ data "terraform_remote_state" "training_emr_cluster" {
   config {
     key    = "training_emr_cluster.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 
@@ -31,7 +31,7 @@ data "terraform_remote_state" "ingester" {
   config {
     key    = "ingester.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 

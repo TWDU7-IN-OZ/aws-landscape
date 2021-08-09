@@ -3,7 +3,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.aws_region
+  region  = "${var.aws_region}"
   version = "~> 2.0"
 }
 
@@ -12,7 +12,7 @@ data "terraform_remote_state" "base_networking" {
   config {
     key    = "base_networking.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 
@@ -21,7 +21,7 @@ data "terraform_remote_state" "bastion" {
   config {
     key    = "bastion.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 
@@ -30,21 +30,21 @@ data "terraform_remote_state" "training_emr_cluster" {
   config {
     key    = "training_emr_cluster.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 
 module "training_kafka" {
   source = "../../modules/training_kafka"
 
-  bastion_security_group_id = data.terraform_remote_state.bastion.bastion_security_group_id
-  emr_security_group_id     = data.terraform_remote_state.training_emr_cluster.security_group_id
+  bastion_security_group_id = "${data.terraform_remote_state.bastion.bastion_security_group_id}"
+  emr_security_group_id     = "${data.terraform_remote_state.training_emr_cluster.security_group_id}"
   deployment_identifier     = "data-eng-${var.cohort}"
-  vpc_id                    = data.terraform_remote_state.base_networking.vpc_id
-  subnet_id                 = data.terraform_remote_state.base_networking.private_subnet_ids[0]
+  vpc_id                    = "${data.terraform_remote_state.base_networking.vpc_id}"
+  subnet_id                 = "${data.terraform_remote_state.base_networking.private_subnet_ids[0]}"
   ec2_key_pair              = "tw-dataeng-${var.cohort}"
-  dns_zone_id               = data.terraform_remote_state.base_networking.dns_zone_id
-  instance_type             = var.kafka["instance_type"]
+  dns_zone_id               = "${data.terraform_remote_state.base_networking.dns_zone_id}"
+  instance_type             = "${var.kafka["instance_type"]}"
   availability_zones = [
     "${var.aws_region}a",
     "${var.aws_region}b",

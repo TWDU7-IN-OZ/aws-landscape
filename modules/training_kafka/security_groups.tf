@@ -2,20 +2,20 @@ resource "aws_security_group" "kafka" {
 
   name        = "kafka-${var.deployment_identifier}"
   description = "Security group for Kafka"
-  vpc_id      = var.vpc_id
+  vpc_id      = "${var.vpc_id}"
 
-  tags = (merge(
+  tags = "${merge(
     local.common_tags,
     map(
       "Name", "kafka-${var.deployment_identifier}"
     )
-  ))
+  )}"
 }
 
 resource "aws_security_group_rule" "bastion_ssh" {
   type                     = "ingress"
-  security_group_id        = aws_security_group.kafka.id
-  source_security_group_id = var.bastion_security_group_id
+  security_group_id        = "${aws_security_group.kafka.id}"
+  source_security_group_id = "${var.bastion_security_group_id}"
   from_port                = 22
   to_port                  = 22
   protocol                 = "tcp"
@@ -24,7 +24,7 @@ resource "aws_security_group_rule" "bastion_ssh" {
 
 resource "aws_security_group_rule" "kafka_egress" {
   type              = "egress"
-  security_group_id = aws_security_group.kafka.id
+  security_group_id = "${aws_security_group.kafka.id}"
   cidr_blocks       = ["0.0.0.0/0"]
   from_port         = 0
   to_port           = 0
@@ -34,8 +34,8 @@ resource "aws_security_group_rule" "kafka_egress" {
 
 resource "aws_security_group_rule" "kafka_emr_ingress_broker" {
   type                     = "ingress"
-  security_group_id        = aws_security_group.kafka.id
-  source_security_group_id = var.emr_security_group_id
+  security_group_id        = "${aws_security_group.kafka.id}"
+  source_security_group_id = "${var.emr_security_group_id}"
   from_port                = 9092
   to_port                  = 9092
   protocol                 = "tcp"
@@ -44,8 +44,8 @@ resource "aws_security_group_rule" "kafka_emr_ingress_broker" {
 
 resource "aws_security_group_rule" "kafka_emr_ingress_zookeeper" {
   type                     = "ingress"
-  security_group_id        = aws_security_group.kafka.id
-  source_security_group_id = var.emr_security_group_id
+  security_group_id        = "${aws_security_group.kafka.id}"
+  source_security_group_id = "${var.emr_security_group_id}"
   from_port                = 2181
   to_port                  = 2181
   protocol                 = "tcp"

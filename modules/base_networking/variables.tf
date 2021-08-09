@@ -4,7 +4,7 @@ variable "vpc_cidr" {
 
 variable "availability_zones" {
   description = "The availability zones for which to add subnets."
-  type        = list(string)
+  type        = "list"
 }
 
 variable "deployment_identifier" {

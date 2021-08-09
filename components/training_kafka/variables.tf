@@ -7,7 +7,7 @@ variable "aws_region" {
 }
 
 variable "kafka" {
-  type = map(string)
+  type = "map"
   default = {
     instance_type = "t2.medium"
   }
