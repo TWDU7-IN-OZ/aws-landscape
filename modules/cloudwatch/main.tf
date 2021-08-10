@@ -21,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
 
   dimensions = {
     path = "/data"
-    InstanceId = data.terraform_remote_state.training_kafka.kafka_instance_id
+    InstanceId = "${data.terraform_remote_state.training_kafka.kafka_instance_id}"
     device = "xvdh"
     fstype = "xfs"
 
