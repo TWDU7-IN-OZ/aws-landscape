@@ -3,7 +3,7 @@ data "terraform_remote_state" "training_kafka" {
   config {
     key    = "training_kafka.tfstate"
     bucket = "tw-dataeng-${var.cohort}-tfstate"
-    region = var.aws_region
+    region = "${var.aws_region}"
   }
 }
 
