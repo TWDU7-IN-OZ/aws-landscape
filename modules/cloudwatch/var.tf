@@ -1,7 +1,7 @@
 variable "cohort" {
-  default = ""
+  description = "Training cohort, eg: london-summer-2018"
 }
 
 variable "aws_region" {
-  default = ""
+  description = "Region in which to build resources."
 }

@@ -20,6 +20,6 @@ data "terraform_remote_state" "monitoring" {
 
 module "cloudwatch" {
   source = "../../modules/cloudwatch"
-  cohort = var.cohort
-  aws_region = var.aws_region
+  cohort = "${var.cohort}"
+  aws_region = "${var.aws_region}"
 }
