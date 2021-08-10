@@ -256,15 +256,15 @@ workflows:
           requires:
             - approveDestroyProductionEnvironment
 
-      - approveCreateMonitoringAndAlerting:
-          type: approval
+      - compileMoniotringAndAlertingProductionEnvironment:
           requires:
             - dummy
 
-      - compileMoniotringAndAlertingProductionEnvironment:
+      - approveCreateMonitoringAndAlerting:
+          type: approval
           requires:
-            - approveCreateMonitoringAndAlerting
+            - compileMoniotringAndAlertingProductionEnvironment
 
       - buildMoniotringAndAlertingProductionEnvironment:
           requires:
-            - compileMoniotringAndAlertingProductionEnvironment
+            - approveCreateMonitoringAndAlerting
