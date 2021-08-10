@@ -32,8 +32,16 @@ jobs:
                 ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster plan -input=false -var-file=prod-env.tfvars;
                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -input=false -var-file=prod-env.tfvars;
                 ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -input=false -var-file=prod-env.tfvars;
-                ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan -input=false;
                 ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan -input=false;
+
+
+ compileMoniotringAndAlertingProductionEnvironment:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan -input=false;
                 ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring plan -input=false;
 
 
@@ -49,9 +57,7 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
                  ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
-                 ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
-                #  ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring apply -input=false -auto-approve;
 
  buildKafka:
      <<: *defaults
@@ -61,12 +67,13 @@ jobs:
          command: source /okta_venv/bin/activate;
                   ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
- buildKafkaMonitoring:
+ buildMoniotringAndAlertingProductionEnvironment:
      <<: *defaults
      steps:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
                   ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring apply -input=false -auto-approve;
 
  buildClientVPN:
@@ -140,6 +147,19 @@ jobs:
          command: source /okta_venv/bin/activate;
                   ./scripts/updateKafkaProperties.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
 
+installCloudWatchAgentOnKafka:
+  <<: *defaults
+  steps:
+    - checkout
+    - attach_workspace:
+        at: /home/circleci/project
+    - add_ssh_keys:
+        fingerprints:
+          - "c4:31:97:61:4c:4f:39:74:28:37:50:13:30:d9:a6:96"
+    - run:
+        command: source /okta_venv/bin/activate;
+          ./scripts/installCloudwatchAgentOnKafka.sh $BASTION_PUBLIC_IP $TRAINING_COHORT
+
 workflows:
   version: 2
   build:
@@ -212,7 +232,7 @@ workflows:
           requires:
             - compileProductionEnvironment     
             
-      - buildKafkaMonitoring:
+      - installCloudWatchAgentOnKafka:
           requires:
             - approveKafkaMonitoring      
 
@@ -235,3 +255,16 @@ workflows:
       - destroyProductionEnvironment:
           requires:
             - approveDestroyProductionEnvironment
+
+      - approveCreateMonitoringAndAlerting:
+          type: approval
+          requires:
+            - dummy
+
+      - compileMoniotringAndAlertingProductionEnvironment:
+          requires:
+            - approveCreateMonitoringAndAlerting
+
+      - buildMoniotringAndAlertingProductionEnvironment:
+          requires:
+            - compileMoniotringAndAlertingProductionEnvironment
