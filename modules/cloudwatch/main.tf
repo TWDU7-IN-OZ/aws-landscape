@@ -9,7 +9,7 @@ data "terraform_remote_state" "training_kafka" {
 
 resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
   alarm_name = "Kafka EBS Consumption over Threshold"
-  AlarmDescription = "Kafka EBS mount has utilised more space then the threshold"
+  alarm_description = "Kafka EBS mount has utilised more space then the threshold"
   alarm_actions = [
     "arn:aws:sns:ap-southeast-1:483506802077:twdu7_CloudWatch_Alarms_Topic"]
   ok_actions = []
