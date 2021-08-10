@@ -1,8 +1,9 @@
-data "aws_instance" "kafka_instance" {
-  filter {
-    name = "name"
-    values = [
-      "kafka-data-eng-twdu7-in-oz"]
+data "terraform_remote_state" "training_kafka" {
+  backend = "s3"
+  config {
+    key    = "training_kafka.tfstate"
+    bucket = "tw-dataeng-${var.cohort}-tfstate"
+    region = var.aws_region
   }
 }
 
@@ -20,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "Disk_Space_kafkaInstanceDisk" {
 
   dimensions = {
     path = "/data"
-    InstanceId = data.aws_instance.kafka_instance.id
+    InstanceId = data.terraform_remote_state.training_kafka.kafka_instance_id
     device = "xvdh"
     fstype = "xfs"
 
