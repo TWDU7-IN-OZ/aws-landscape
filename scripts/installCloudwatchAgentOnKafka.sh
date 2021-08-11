@@ -51,7 +51,7 @@ sudo echo '
   },
   "metrics": {
     "append_dimensions": {
-        "InstanceId": "${aws:InstanceId}"
+        "InstanceId": "\${aws:InstanceId}"
     },
     "metrics_collected": {
       "disk": {
