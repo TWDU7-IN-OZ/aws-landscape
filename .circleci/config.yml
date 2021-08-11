@@ -60,6 +60,13 @@ jobs:
      - run:
          command: source /okta_venv/bin/activate;
                   ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
+ buildEMR:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                 ./scripts/run_terraform.sh $TRAINING_COHORT training_emr_cluster apply -input=false -auto-approve -var-file=prod-env.tfvars;
 
  buildKafkaMonitoring:
      <<: *defaults
@@ -207,6 +214,11 @@ workflows:
           requires:
             - compileProductionEnvironment
 
+      - approveEMR:
+          type: approval
+          requires:
+            - compileProductionEnvironment
+
       - approveKafkaMonitoring:
           type: approval
           requires:
@@ -219,6 +231,10 @@ workflows:
       - buildKafka:
           requires:
             - approveKafka
+
+      - buildEMR:
+          requires:
+            - approveEMR
 
       - approvebuildClientVPN:
           type: approval

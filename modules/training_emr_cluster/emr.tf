@@ -18,6 +18,28 @@ resource "aws_emr_cluster" "training_cluster" {
     }
   }
 
+  configurations_json = <<EOF
+    [
+      {
+        "Classification": "yarn-site",
+        "Properties": {
+          "yarn.resourcemanager.scheduler.class": "org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler"
+        },
+        "Configurations":[]
+      },
+      {
+        "Classification": "capacity-scheduler",
+        "Properties": {
+          "yarn.scheduler.capacity.root.queues": "default,streaming,monitoring",
+          "yarn.scheduler.capacity.root.default.capacity": 25,
+          "yarn.scheduler.capacity.root.streaming.capacity": 70,
+          "yarn.scheduler.capacity.root.monitoring.capacity": 5
+        },
+        "Configurations":[]
+      }
+    ]
+  EOF
+
   lifecycle {
     ignore_changes = ["step"]
   }
