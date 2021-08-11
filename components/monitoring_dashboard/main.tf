@@ -161,6 +161,23 @@ resource "aws_cloudwatch_dashboard" "main" {
                     }
                 }
             }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "metrics": [
+                    [ "CWAgent", "disk_used_percent", "path", "/data", "InstanceId", "${data.terraform_remote_state.training_kafka.kafka_instance_id}", "device", "xvdh", "fstype", "xfs" ],
+                    [ "...", "/", ".", ".", ".", "xvda1", ".", "." ]
+                ],
+                "region": "${var.aws_region}",
+                "title": "Kafka Storage Monitor"
+            }
         }
     ]
 }
