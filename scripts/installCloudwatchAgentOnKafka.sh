@@ -67,7 +67,7 @@ sudo echo '
     }
   }
 }
-' >> /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+' | sudo tee /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
 sudo systemctl restart amazon-cloudwatch-agent
 EOF
 
