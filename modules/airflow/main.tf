@@ -28,7 +28,7 @@ resource "aws_mwaa_environment" "mwaa" {
 }
 
 data "aws_subnet" "airflow_subnets" {
-  id = [subnet-0067b49e65d5c24e8, subnet-0b52b420abc514df3]
+  id = "${[subnet-0067b49e65d5c24e8, subnet-0b52b420abc514df3]}"
 }
 
 data "aws_security_group" "airflow_security_group" {
