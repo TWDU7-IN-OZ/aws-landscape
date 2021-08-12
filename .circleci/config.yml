@@ -51,6 +51,7 @@ jobs:
      - checkout
      - run:
          command: source /okta_venv/bin/activate;
+                ./scripts/run_terraform.sh $TRAINING_COHORT airflow init -input=false;
                 ./scripts/run_terraform.sh $TRAINING_COHORT airflow plan -input=false;
                 
 
