@@ -297,7 +297,11 @@ workflows:
           requires:
             - dummy
 
-      - compileAirflow:
+      - approvecompileAirflow:
+          requires:
+            - dummy      
+
+      - approvecompileAirflow:
           type: approval
           requires:
             - compileAirflow      
@@ -310,7 +314,7 @@ workflows:
 
       - buildAirflowProductionEnvironment:
          requires:
-           - compileAirflow      
+           - approvecompileAirflow      
 
       - buildMoniotringAndAlertingProductionEnvironment:
           requires:
