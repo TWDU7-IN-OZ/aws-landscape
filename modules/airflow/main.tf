@@ -20,7 +20,7 @@ resource "aws_mwaa_environment" "mwaa" {
   name               = "example"
 
   network_configuration {
-    security_group_ids = [aws_security_group.airflow_security_group.id]
+    security_group_ids = "${[aws_security_group.airflow_security_group.id]}"
     subnet_ids         = "${aws_subnet.airflow_subnets[*].id}"
   }
 
