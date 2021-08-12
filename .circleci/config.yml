@@ -297,7 +297,7 @@ workflows:
           requires:
             - dummy
 
-      - approvecompileAirflow:
+      - compileAirflow:
           requires:
             - dummy      
 
