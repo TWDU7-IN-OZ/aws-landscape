@@ -33,6 +33,7 @@ jobs:
                 ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka plan -input=false -var-file=prod-env.tfvars;
                 ./scripts/run_terraform.sh $TRAINING_COHORT ingester plan -input=false -var-file=prod-env.tfvars;
                 ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn plan -input=false;
+                
 
 
  compileMoniotringAndAlertingProductionEnvironment:
@@ -43,6 +44,15 @@ jobs:
          command: source /okta_venv/bin/activate;
                 ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard plan -input=false;
                 ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring plan -input=false;
+ 
+ compileAirflow:
+   <<: *defaults
+   steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                ./scripts/run_terraform.sh $TRAINING_COHORT airflow plan -input=false;
+                
 
 
  buildProductionEnvironment:
@@ -58,6 +68,7 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT training_kafka apply -input=false -auto-approve -var-file=prod-env.tfvars;
                  ./scripts/run_terraform.sh $TRAINING_COHORT ingester apply -input=false -auto-approve -var-file=prod-env.tfvars;
                  ./scripts/run_terraform.sh $TRAINING_COHORT client_vpn apply -input=false -auto-approve;
+              
 
  buildKafka:
      <<: *defaults
@@ -82,6 +93,15 @@ jobs:
          command: source /okta_venv/bin/activate;
                   ./scripts/run_terraform.sh $TRAINING_COHORT monitoring_dashboard apply -input=false -auto-approve;
                   ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring apply -input=false -auto-approve;
+
+ buildAirflowProductionEnvironment:
+     <<: *defaults
+     steps:
+     - checkout
+     - run:
+         command: source /okta_venv/bin/activate;
+                  ./scripts/run_terraform.sh $TRAINING_COHORT airflow apply -input=false -auto-approve;
+                 
 
  buildClientVPN:
      <<: *defaults
@@ -115,6 +135,7 @@ jobs:
                  ./scripts/run_terraform.sh $TRAINING_COHORT bastion destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT base_networking destroy -input=false -auto-approve;
                  ./scripts/run_terraform.sh $TRAINING_COHORT kafka_monitoring destroy -input=false -auto-approve;
+                 ./scripts/run_terraform.sh $TRAINING_COHORT airflow destroy -input=false -auto-approve;
  mountEBS:
    <<: *defaults
    steps:
@@ -276,10 +297,20 @@ workflows:
           requires:
             - dummy
 
+      - compileAirflow:
+          type: approval
+          requires:
+            - compileAirflow      
+
       - approveCreateMonitoringAndAlerting:
           type: approval
           requires:
             - compileMoniotringAndAlertingProductionEnvironment
+
+
+       - buildAirflowProductionEnvironment:
+          requires:
+            - compileAirflow      
 
       - buildMoniotringAndAlertingProductionEnvironment:
           requires:
