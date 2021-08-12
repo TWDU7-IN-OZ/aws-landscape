@@ -16,15 +16,15 @@ resource "aws_iam_role" "airflow_role" {
 
 resource "aws_mwaa_environment" "mwaa" {
   dag_s3_path        = "dags/"
-  execution_role_arn = aws_iam_role.airflow_role.arn
+  execution_role_arn = "${aws_iam_role.airflow_role.arn}"
   name               = "example"
 
   network_configuration {
     security_group_ids = [aws_security_group.airflow_security_group.id]
-    subnet_ids         = aws_subnet.airflow_subnets[*].id
+    subnet_ids         = "${aws_subnet.airflow_subnets[*].id}"
   }
 
-  source_bucket_arn = aws_s3_bucket.airflow_bucket.arn
+  source_bucket_arn = "${aws_s3_bucket.airflow_bucket.arn}"
 }
 
 data "aws_subnet" "airflow_subnets" {
