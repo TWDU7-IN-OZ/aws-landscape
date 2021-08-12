@@ -308,9 +308,9 @@ workflows:
             - compileMoniotringAndAlertingProductionEnvironment
 
 
-       - buildAirflowProductionEnvironment:
-          requires:
-            - compileAirflow      
+      - buildAirflowProductionEnvironment:
+         requires:
+           - compileAirflow      
 
       - buildMoniotringAndAlertingProductionEnvironment:
           requires:
