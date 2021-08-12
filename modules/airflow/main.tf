@@ -10,19 +10,7 @@ resource "aws_s3_bucket" "airflow_bucket" {
 
 resource "aws_iam_role" "airflow_role" {
   name = "airflow_role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
+  assume_role_policy = data.aws_iam_policy_document.airflow_assume_role.json
 }
 
 resource "aws_mwaa_environment" "mwaa" {
@@ -44,4 +32,14 @@ data "aws_subnet" "airflow_subnets" {
 
 data "aws_security_group" "airflow_security_group" {
   id = "sg-0d303d0123f83eedf"
+}
+
+data "aws_iam_policy_document" "airflow_assume_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
 }
