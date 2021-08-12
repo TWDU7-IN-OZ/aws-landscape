@@ -21,7 +21,7 @@ resource "aws_mwaa_environment" "mwaa" {
 
   network_configuration {
     security_group_ids = "${aws_security_group.airflow_security_group.id}"
-    subnet_ids         = "${[aws_subnet.airflow_subnet1.id, aws_subnet.airflow_subnet2.id]}"
+    subnet_ids         = ["${aws_subnet.airflow_subnet1.id}", "${aws_subnet.airflow_subnet2.id}"]
   }
 
   source_bucket_arn = "${aws_s3_bucket.airflow_bucket.arn}"
