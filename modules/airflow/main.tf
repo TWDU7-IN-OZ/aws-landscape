@@ -10,7 +10,8 @@ resource "aws_s3_bucket" "airflow_bucket" {
 
 resource "aws_iam_role" "airflow_role" {
   name = "airflow_role"
-  assume_role_policy = data.aws_iam_policy_document.airflow_assume_role.json
+  assume_role_policy = "${data.aws_iam_policy_document.airflow_assume_role.json}"
+
 }
 
 resource "aws_mwaa_environment" "mwaa" {
