@@ -121,13 +121,13 @@ resource "aws_db_instance" "airflow-database" {
 }
 
 resource "aws_db_subnet_group" "airflow_subnetgroup" {
-  name        = "airflow-database-subnetgrouptest"
+  name        = "airflow-database-subnetgroupairflow"
   description = "airflow database subnet group"
   subnet_ids  = [ "${var.subnet_ids}" ]
 }
 
 resource "aws_security_group" "allow_airflow_database" {
-  name        = "allow_airflow_databasetest"
+  name        = "allow_airflow_databaseairflow"
   description = "Controlling traffic to and from airflows rds instance."
   vpc_id      = "${var.vpc_id}"
 
