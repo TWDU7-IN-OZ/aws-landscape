@@ -24,7 +24,7 @@ module "airflow" {
 
   vpc_id            = "vpc-031ca3def345cce88"
 
-  security_group_id = "sg-09b7623829a722fe1"
+  security_group_id = "sgr-0f8df69cc112eb46c"
   # subnet_ids        = [ "${module.vpc.public_subnets[0]}", "${module.vpc.public_subnets[1]}" ]
   subnet_ids = ["subnet-0067b49e65d5c24e8", "subnet-0b52b420abc514df3"]
 
