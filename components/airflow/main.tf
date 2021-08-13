@@ -17,9 +17,9 @@ module "airflow" {
   db_password       = "thisistheairflowdbpassword"
   fernet_key        = "8hEdQizWjFGANL-MfypCwijKR66tb3uYNdJsrZRioaI="
 
-  vpc_id            = "${module.vpc.vpc_id}"
+  vpc_id            = "vpc-031ca3def345cce88"
 
-  security_group_id = "${aws_security_group.airflow-security-group.id}"
+  security_group_id = "sg-09a6a300fc8253565"
   # subnet_ids        = [ "${module.vpc.public_subnets[0]}", "${module.vpc.public_subnets[1]}" ]
   subnet_ids = ["subnet-0067b49e65d5c24e8", "subnet-0b52b420abc514df3"]
 
